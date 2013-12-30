@@ -4,7 +4,6 @@ require 'sinatra'
 require 'json'
 require 'data_mapper'
 require 'puma'
-require 'sinatra'
 require "sinatra/namespace"
 require "sinatra/base"
 require 'debugger'
@@ -110,7 +109,7 @@ namespace '/api/v1' do
     hero.to_json
   end
 
-  #update
+  # Update
   put '/heroes/:id' do
     json = request.body.read.to_json
     data = JSON.parse(json, :quirks_mode => true)
@@ -176,7 +175,7 @@ namespace '/api/v1' do
     weapon.to_json
   end
 
-  #delete
+  # Delete
   delete '/weapons/:id' do
     weapon ||= Weapon.get(params[:id]) || halt(404)
     halt 404 if weapon.nil?
@@ -196,7 +195,7 @@ namespace '/api/v1' do
     races.to_json
   end
 
-  # show
+  # Show
   get '/races/:id' do
     race = Race.get(params[:id])
     if race.nil?
@@ -205,7 +204,7 @@ namespace '/api/v1' do
     race.to_json
   end
 
-  #Create
+  # Create
   post '/races' do
     json = request.body.read.to_json
     data = JSON.parse(json, :quirks_mode => true)
@@ -220,7 +219,7 @@ namespace '/api/v1' do
     [201, {'Location' => "/race/#{race.id}"}, race.to_json]
   end
 
-  #Update
+  # Update
   put '/races/:id' do
     json = request.body.read.to_json
     data = JSON.parse(json, :quirks_mode => true)
@@ -252,7 +251,7 @@ namespace '/api/v1' do
     jobs.to_json
   end
 
-  #S how
+  # Show
   get '/jobs/:id' do
     job = Job.get(params[:id])
     if job.nil?
@@ -302,5 +301,7 @@ namespace '/api/v1' do
   before do
     content_type 'application/json'
     headers["X-CSRF-Token"] = session[:csrf] ||= SecureRandom.hex(32)
+    # To allow Cross Domain XHR
+    headers["Access-Control-Allow-Origin"] ||= request.env["HTTP_ORIGIN"] 
   end
 end
