@@ -3,11 +3,9 @@ require 'rubygems'
 require 'sinatra'
 require 'json'
 require 'data_mapper'
-require 'puma'
 require "sinatra/namespace"
 require "sinatra/base"
-require 'debugger'
-require 'haml'
+require 'rest-client'
 require './services/parser'
 
 configure :development, :test, :production do
@@ -22,7 +20,13 @@ configure :development, :test, :production do
 end
 
 # Live Postgres for Heroku (Production):
-DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_AMBER_URL'] || 'postgres://localhost/mydb')
+DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_AMBER_URL'] || {
+  :adapter => "postgres",
+  :database => "test",
+  :username => "postgres",
+  :password => "postgres",
+  :host => "localhost"
+})
 # Local SQlite Locally (Development):
 # DataMapper.setup(:default, "sqlite::memory:")
 
@@ -32,10 +36,11 @@ class Order
   include DataMapper::Resource
   property :id, Serial
   property :data, PgJSON, load_raw_value: true
+  property :status, String
 end
 
 DataMapper.finalize
-DataMapper.auto_migrate!
+DataMapper.auto_upgrade!
 
 # Namespacing the API for version one.
 namespace '/api/v1' do
@@ -57,18 +62,27 @@ namespace '/api/v1' do
 
   # Create
   post '/order' do
-    json = request.body.read.to_json
-    parsed_json = Parser.new(json).payload
-
-    if data.nil? || data['id'].nil?
+    json = request.body.read
+    parsed_json = Parser.new(json).payload.to_json
+    
+    if parsed_json.nil? || parsed_json['externalCode'].nil?
       halt 400
     end
 
     order = Order.new(data: parsed_json)
 
-    halt 500 unless order.save
-    status 201
-    order.to_json
+    begin
+      api_url = 'https://delivery-center-recruitment-ap.herokuapp.com/'
+      response = RestClient.post(api_url, parsed_json, headers={'X-Sent': Time.new.strftime("%Hh%M - %d/%m/%Y")})            
+      order.status = response.body
+      order.save!
+
+      halt 500 unless order.saved?
+      status 201
+      order.to_json
+    rescue RestClient::ExceptionWithResponse => e
+      puts e.response
+    end
   end
 
   # Delete
@@ -87,6 +101,6 @@ namespace '/api/v1' do
     content_type 'application/json'
     headers["X-CSRF-Token"] = session[:csrf] ||= SecureRandom.hex(32)
     # To allow Cross Domain XHR
-    headers["Access-Control-Allow-Origin"] ||= request.env["HTTP_ORIGIN"] 
+    # headers["Access-Control-Allow-Origin"] ||= request.env["HTTP_ORIGIN"]
   end
 end
