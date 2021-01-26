@@ -38,7 +38,7 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 get '/' do
-  puts 'GET /api/v1/orders'
+  'GET /api/v1/orders'
 end
 
 # Namespacing the API for version one.
