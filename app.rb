@@ -38,6 +38,11 @@ end
 DataMapper.finalize
 DataMapper.auto_upgrade!
 
+# Root
+get '/' do
+  send_file 'views/index.txt'
+end
+
 # Namespacing the API for version one.
 namespace '/api/v1' do
 

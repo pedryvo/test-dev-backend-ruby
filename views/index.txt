@@ -1,0 +1,4 @@
+### Welcome to Orders API
+
+# To see orders, visit
+/api/v1/orders
