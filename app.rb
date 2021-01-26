@@ -3,6 +3,7 @@ require 'rubygems'
 require 'sinatra'
 require 'json'
 require 'data_mapper'
+require 'dm-postgres-types'
 require "sinatra/namespace"
 require "sinatra/base"
 require 'rest-client'
@@ -36,10 +37,6 @@ end
 
 DataMapper.finalize
 DataMapper.auto_upgrade!
-
-get '/' do
-  'GET /api/v1/orders'
-end
 
 # Namespacing the API for version one.
 namespace '/api/v1' do
