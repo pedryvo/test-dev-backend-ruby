@@ -41,6 +41,6 @@ Here is an example request that will delete an **Order**.
 
 * To run the Sinatra app simply install the dependencies via bundler and run the server from the root using `bundle exec shotgun`.
 
-* To run project locally you must have a PostgreSQL database named 'postgres' with an user 'postgres' and password 'postgres' on your machine.
+* To run project locally you must have a PostgreSQL database named 'test' with an user 'postgres' and password 'postgres' on your machine.
 
 * To run project on Heroku you need to add an add-on after deploy using `heroku addons:create heroku-postgresql:hobby-dev`.
