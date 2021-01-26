@@ -14,6 +14,13 @@ class Parser
                }
   end
 
+  def format_timezone(datetime)
+    # get miliseconds
+    ms = datetime[/\.(.*?)-/,1]
+    # transform to UTC and concat miliseconds
+    datetime = DateTime.parse(datetime).to_time.utc.iso8601.insert(-2, ".#{ms}")
+  end
+
   def payload
     data = {
         'externalCode' => @hash['id'].to_s,
@@ -30,7 +37,7 @@ class Parser
         'complement'=> 'galpao',
         'latitude'=> @hash['shipping']['receiver_address']['latitude'],
         'longitude'=>  @hash['shipping']['receiver_address']['longitude'],
-        'dtOrderCreate'=> '2019-06-27T19=>59=>08.251Z', # TO DO
+        'dtOrderCreate'=> format_timezone(@hash['payments'][0]['date_created']),
         'postalCode'=> @hash['shipping']['receiver_address']['zip_code'],
         'number'=> @hash['payments'][0]['taxes_amount'].to_s,
         'customer'=> {
