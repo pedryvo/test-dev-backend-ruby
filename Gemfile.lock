@@ -73,6 +73,8 @@ GEM
       mime-types-data (~> 3.2015)
     mime-types-data (3.2020.1104)
     minitest (5.14.3)
+    minitest-color (0.0.2)
+      minitest (~> 5)
     multi_json (1.15.0)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
@@ -122,6 +124,7 @@ DEPENDENCIES
   dm-postgres-types
   json
   minitest (~> 5.0)
+  minitest-color
   multi_json
   rack-test (~> 0.6.1)
   rake

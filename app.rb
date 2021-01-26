@@ -38,10 +38,6 @@ end
 DataMapper.finalize
 DataMapper.auto_upgrade!
 
-get '/' do
-  'GET /api/v1/orders'
-end
-
 # Namespacing the API for version one.
 namespace '/api/v1' do
 
