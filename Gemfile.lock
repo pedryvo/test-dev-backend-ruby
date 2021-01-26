@@ -84,6 +84,7 @@ GEM
       rack
     rack-test (0.6.3)
       rack (>= 1.0)
+    rake (13.0.3)
     rest-client (2.1.0)
       http-accept (>= 1.7.0, < 2.0)
       http-cookie (>= 1.0.2, < 2.0)
@@ -123,6 +124,7 @@ DEPENDENCIES
   minitest (~> 5.0)
   multi_json
   rack-test (~> 0.6.1)
+  rake
   rest-client
   shotgun
   sinatra

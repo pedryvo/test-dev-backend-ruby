@@ -3,6 +3,7 @@ require 'rubygems'
 require 'sinatra'
 require 'json'
 require 'data_mapper'
+require 'dm-postgres-types'
 require "sinatra/namespace"
 require "sinatra/base"
 require 'rest-client'

@@ -1,5 +1,6 @@
 source 'https://rubygems.org'
 
+gem 'rake'
 gem 'json'
 gem 'data_mapper'
 gem 'dm-postgres-adapter'
