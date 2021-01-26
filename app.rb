@@ -15,23 +15,18 @@ configure :development, :test, :production do
   set :protection, origin_whitelist: ["chrome-extension://fdmmgilgnpjigdojojpjoooidkmcomcm", "http://127.0.0.1"]
   set :protect_from_csrf, true
   set :server, :puma
-  # Local Sqlite (Development):
-  # set :datamapper_url, "sqlite3://#{File.dirname(__FILE__)}/test.sqlite3"
 end
 
 # Live Postgres for Heroku (Production):
-DataMapper.setup(:default, ENV['HEROKU_POSTGRESQL_AMBER_URL'] || {
+DataMapper.setup(:default, ENV['DATABASE_URL'] || {
   :adapter => "postgres",
   :database => "test",
   :username => "postgres",
   :password => "postgres",
   :host => "localhost"
 })
-# Local SQlite Locally (Development):
-# DataMapper.setup(:default, "sqlite::memory:")
 
-
-# Main classes for the order of the pixel API.
+# Main classes for the orders API.
 class Order
   include DataMapper::Resource
   property :id, Serial
